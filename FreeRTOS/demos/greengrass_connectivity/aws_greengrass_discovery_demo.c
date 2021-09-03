@@ -68,7 +68,7 @@
 
 #define ggdDEMO_KEEP_ALIVE_INTERVAL_SECONDS    1200
 /* Number of times to try MQTT connection. */
-#define ggdDEMO_NUM_TRIES                      1000
+#define ggdDEMO_NUM_TRIES                      10
 #define ggdDEMO_RETRY_WAIT_MS                  2000
 
 /**
