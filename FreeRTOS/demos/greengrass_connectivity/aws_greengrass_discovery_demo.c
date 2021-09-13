@@ -102,7 +102,7 @@ static int _discoverGreengrassCore( const IotNetworkInterface_t * pNetworkInterf
 static void _sendMessageToGGC( IotMqttConnection_t mqttConnection )
 {
     const char * pcTopic = ggdDEMO_MQTT_MSG_TOPIC;
-    uint32_t ulMessageCounter;
+    uint32_t ulMessageCounter = 0;
     char cBuffer[ ggdDEMO_MAX_MQTT_MSG_SIZE ];
     IotMqttError_t xMqttStatus = IOT_MQTT_STATUS_PENDING;
     IotMqttPublishInfo_t xPublishInfo = IOT_MQTT_PUBLISH_INFO_INITIALIZER;
@@ -114,7 +114,8 @@ static void _sendMessageToGGC( IotMqttConnection_t mqttConnection )
     xPublishInfo.pTopicName = pcTopic;
     xPublishInfo.topicNameLength = ( uint16_t ) ( strlen( pcTopic ) );
 
-    for( ulMessageCounter = 0; ulMessageCounter < ( uint32_t ) ggdDEMO_MAX_MQTT_MESSAGES; ulMessageCounter++ )
+    // for( ulMessageCounter = 0; ulMessageCounter < ( uint32_t ) ggdDEMO_MAX_MQTT_MESSAGES; ulMessageCounter++ )
+    while(true)
     {
         /* Set the members of the publish info. */
         xPublishInfo.payloadLength = ( uint32_t ) sprintf( cBuffer, ggdDEMO_MQTT_MSG_DISCOVERY, ( long unsigned int ) ulMessageCounter ); /*lint !e586 sprintf can be used for specific demo. */
@@ -133,6 +134,7 @@ static void _sendMessageToGGC( IotMqttConnection_t mqttConnection )
         }
 
         IotClock_SleepMs( _timeBetweenPublishMs );
+        ulMessageCounter++;
     }
 }
 
