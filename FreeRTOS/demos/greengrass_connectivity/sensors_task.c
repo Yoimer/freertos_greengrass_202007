@@ -16,6 +16,7 @@
 char version[VERSION_STRING_LENGTH];
 char string_latitude[LATITUDE_STRING_LENGTH];
 char string_longitude[LONGITUDE_STRING_LENGTH];
+extern char sensorsPayload[PAYLOAD_STRING_LENGTH];
 
 void sensors_task(void *pvParameters)
 {
@@ -34,7 +35,7 @@ void sensors_task(void *pvParameters)
         }else {
             printf("Could not read data from dht11 sensor\n");
         }
-
+        sprintf(sensorsPayload, "{\"T2\":%d,\"H\":%d}",temperature/10, humidity/10);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 } 

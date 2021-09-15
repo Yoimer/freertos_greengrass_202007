@@ -60,11 +60,16 @@
 /* Includes for initialization. */
 #include "iot_mqtt.h"
 
+#include "sensors.h"
+char sensorsPayload[PAYLOAD_STRING_LENGTH];
+
 #define ggdDEMO_MAX_MQTT_MESSAGES              100
 #define ggdDEMO_MAX_MQTT_MSG_SIZE              500
 #define ggdDEMO_DISCOVERY_FILE_SIZE            2500
 #define ggdDEMO_MQTT_MSG_TOPIC                 "freertos/demos/ggd"
-#define ggdDEMO_MQTT_MSG_DISCOVERY             "{\"message\":\"Hello #%lu from FreeRTOS Discovery to Greengrass Core.\"}"
+// #define ggdDEMO_MQTT_MSG_DISCOVERY             "{\"message\":\"Hello #%lu from FreeRTOS Discovery to Greengrass Core.\"}"
+
+char * ggdDEMO_MQTT_MSG_DISCOVERY = sensorsPayload;
 
 #define ggdDEMO_KEEP_ALIVE_INTERVAL_SECONDS    1200
 /* Number of times to try MQTT connection. */
