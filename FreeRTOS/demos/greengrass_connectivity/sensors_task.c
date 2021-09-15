@@ -58,7 +58,7 @@ void sensors_task(void *pvParameters)
         }else {
             printf("Could not read data from dht11 sensor\n");
         }
-        sprintf(sensorsPayload, "{\"T2\":%d,\"H\":%d}",temperature/10, humidity/10);
+        sprintf(sensorsPayload, "{\"T1\":%.2f,\"P\":%d,\"T2\":%d,\"H\":%d}", temp, pressure, temperature/10, humidity/10);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 } 
