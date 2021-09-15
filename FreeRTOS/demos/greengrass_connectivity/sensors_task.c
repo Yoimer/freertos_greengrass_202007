@@ -2,6 +2,7 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <esp_system.h>
+#include <bmp180.h>
 #include <dht.h>
 #include <string.h>
 #include <stdio.h>
@@ -10,8 +11,10 @@
 #include "esp_log.h"
 #include "iot_ble_config.h"
 #include "driver/uart.h"
-// #include "minmea.h"
 #include "sensors.h"
+
+#define SDA_GPIO 21
+#define SCL_GPIO 22
 
 char version[VERSION_STRING_LENGTH];
 char string_latitude[LATITUDE_STRING_LENGTH];
@@ -21,8 +24,28 @@ extern char sensorsPayload[PAYLOAD_STRING_LENGTH];
 void sensors_task(void *pvParameters)
 {
 
+    bmp180_dev_t dev;
+    memset(&dev, 0, sizeof(bmp180_dev_t)); // Zero descriptor
+
+    ESP_ERROR_CHECK_WITHOUT_ABORT(bmp180_init_desc(&dev, 0, SDA_GPIO, SCL_GPIO));
+    ESP_ERROR_CHECK_WITHOUT_ABORT(bmp180_init(&dev));
+
     while (1)
     {
+        /* bmp180 reading */
+        float temp = -200;
+        uint32_t pressure = -200;
+
+        esp_err_t res = bmp180_measure(&dev, &temp, &pressure, BMP180_MODE_STANDARD);
+        if (res != ESP_OK)
+            printf("Could not read data from bmp 180 sensor: %d\n", res);
+        else
+            /* float is used in printf(). you need non-default configuration in
+             * sdkconfig for ESP8266, which is enabled by default for this
+             * example. see sdkconfig.defaults.esp8266
+             */
+            printf("Temperature: %.2f degrees Celsius; Pressure: %d Pa\n", temp, pressure);
+
         /* dht11 reading */
         static const dht_sensor_type_t sensor_type = DHT_TYPE_DHT11;
         static const gpio_num_t dht_gpio = 4;

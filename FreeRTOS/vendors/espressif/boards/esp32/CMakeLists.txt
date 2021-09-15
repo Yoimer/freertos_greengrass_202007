@@ -488,6 +488,22 @@ get_filename_component(
     "components/esp_idf_lib_helpers" ABSOLUTE
 )
 
+list(APPEND IDF_EXTRA_COMPONENT_DIRS ${EXTRA_COMPONENT_DIRS})
+
+get_filename_component(
+    EXTRA_COMPONENT_DIRS
+    "components/bmp180" ABSOLUTE
+)
+
+list(APPEND IDF_EXTRA_COMPONENT_DIRS ${EXTRA_COMPONENT_DIRS})
+
+get_filename_component(
+    EXTRA_COMPONENT_DIRS
+    "components/i2cdev" ABSOLUTE
+)
+
+list(APPEND IDF_EXTRA_COMPONENT_DIRS ${EXTRA_COMPONENT_DIRS})
+
 # This is a hack to have IDF build system use PRIVATE keyword when
 # calling target_link_libraries() on aws_demos target. This is necessary
 # as CMake doesn't allow mixing target_link_libraries() call signature
