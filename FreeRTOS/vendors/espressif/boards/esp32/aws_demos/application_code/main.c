@@ -76,6 +76,31 @@
 #include "sensors.h"
 #include <bmp180.h>
 
+//https://klika-tech.com/blog/2021/07/19/is-it-easy-to-provision-wifi-credentials-to-an-iot-device-part-2
+static const BTUuid_t _advUUID =
+{
+    .uu.uu128 = IOT_BLE_ADVERTISING_UUID, /* This is a macro defined by BLE library */
+    .ucType = eBTuuidType128
+};
+
+void IotBle_SetCustomAdvCb( IotBleAdvertisementParams_t * pAdvParams, 
+IotBleAdvertisementParams_t * pScanParams)
+{
+    const BTGattAdvName_t advNameType = {.xType = BTGattAdvNameNone};
+    const BTGattAdvName_t scanRespNameType = {.xType = BTGattAdvNameComplete};
+
+    memset(pAdvParams, 0, sizeof(IotBleAdvertisementParams_t));
+    memset(pScanParams, 0, sizeof(IotBleAdvertisementParams_t));
+    
+    /* Set advertisement message */
+    pAdvParams->pUUID1 = &_advUUID;
+    pAdvParams->name = advNameType;
+    
+    /* This is the scan response, set it back to true. */
+    pScanParams->setScanRsp = true;
+    pScanParams->name = scanRespNameType;
+}
+
 /* Logging Task Defines. */
 #define mainLOGGING_MESSAGE_QUEUE_LENGTH    ( 32 )
 #define mainLOGGING_TASK_STACK_SIZE         ( configMINIMAL_STACK_SIZE * 4 )
